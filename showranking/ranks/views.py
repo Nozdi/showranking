@@ -19,3 +19,12 @@ def save_rank(request):
             success = True
     response = {'success': success}
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+def get_sorted(request):
+    rankings = Ranks.objects.all().order_by('points')
+    data = {}
+    for ranking in rankings:
+        data.update({'id':ranking.user_id,
+            'username':ranking.username, 
+            'points':ranking.points}
+    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
