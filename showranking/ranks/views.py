@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 from django.utils import simplejson
 from ranks.models import Ranks
 from django.views.decorators.csrf import csrf_exempt
@@ -32,3 +34,7 @@ def get_sorted(request):
             'username':ranking.username, 
             'points':ranking.points})
     return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+
+def get_rank(request):
+    rankings = Ranks.objects.all().order_by('points')
+    return render_to_response('rank.html', {'rankings': rankings}, context_instance=RequestContext(request))

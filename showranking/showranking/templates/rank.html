@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>Ranking Google I/0</title>
+    
+    <!-- Bootstrap -->
+    <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive/css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <table>
+      {% for rank in rankings %}
+      <tr><td>{{ rank.username }}</td><td>{{ rank.points }}</td></tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
