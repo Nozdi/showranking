@@ -14,12 +14,7 @@ def save_rank(request):
             pass
         else:
             points = int(points)
-            rank = Ranks.objects.get(user_id=user_id)
-            if rank:
-                rank.username = user_id
-                rank.points = points
-            else:
-                rank = Ranks(user_id=user_id, username=username, points=points)
+            rank = Ranks.objects.get_or_create(user_id=user_id, username=username, points=points)
             rank.save()
             success = True
     response = {'success': success}
