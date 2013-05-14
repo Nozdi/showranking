@@ -1,11 +1,13 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from ranks.models import Ranks
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def save_rank(request):
     success = False
+    
     if request.method == 'POST':
-        json_request = simplejson.loads(request.raw_post_data)
         try:
             user_id = request.POST['id']
             username = request.POST['username']
@@ -14,7 +16,9 @@ def save_rank(request):
             pass
         else:
             points = int(points)
-            rank = Ranks.objects.get_or_create(user_id=user_id, username=username, points=points)
+            rank, created = Ranks.objects.get_or_create(user_id=user_id)
+            rank.username = username
+            rank.points = points
             rank.save()
             success = True
     response = {'success': success}
@@ -26,5 +30,5 @@ def get_sorted(request):
     for ranking in rankings:
         data.update({'id':ranking.user_id,
             'username':ranking.username, 
-            'points':ranking.points}
+            'points':ranking.points})
     return HttpResponse(simplejson.dumps(data), mimetype="application/json")
