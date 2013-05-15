@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.utils import simplejson
 from ranks.models import Ranks
 from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import get_template
 
 @csrf_exempt
 def save_rank(request):
@@ -23,18 +24,19 @@ def save_rank(request):
             rank.points = points
             rank.save()
             success = True
-    response = {'success': success}
-    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    if success:
+        return HttpResponse(status=666)
+    else:
+        return HttpResponse(status=200)
 
 def get_sorted(request):
-    rankings = Ranks.objects.all().order_by('points')
-    data = {}
+    rankings = Ranks.objects.all().order_by('-points')
+    data = []
     for ranking in rankings:
-        data.update({'id':ranking.user_id,
-            'username':ranking.username, 
-            'points':ranking.points})
-    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+        data.append({"id":ranking.user_id,
+            "username":ranking.username, 
+            "points":ranking.points})
+    return HttpResponse(simplejson.dumps(data), content_type="application/json")
 
 def get_rank(request):
-    rankings = Ranks.objects.all().order_by('points')
-    return render_to_response('rank.html', {'rankings': rankings}, context_instance=RequestContext(request))
+    return render_to_response('rank.html', context_instance=RequestContext(request))

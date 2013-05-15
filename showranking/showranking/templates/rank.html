@@ -1,18 +1,28 @@
-<html>
+<html ng-app="myApp">
   <head>
     <title>Ranking Google I/0</title>
     
     <!-- Bootstrap -->
-    <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive/css" rel="stylesheet" type="text/css" />
+    <script src="{{STATIC_URL}}js/jquery-1.9.1.min.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap.js"></script>
+    <link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+    <!-- Angular -->
+    <script src="{{STATIC_URL}}js/angular.min.js"></script>
+    <script src="{{STATIC_URL}}js/controllers.js"></script>
   </head>
-  <body>
-    <table>
-      {% for rank in rankings %}
-      <tr><td>{{ rank.username }}</td><td>{{ rank.points }}</td></tr>
-      {% endfor %}
-    </table>
+  <body ng-controller="RankingCtrl">
+      <div class="ng-cloak">
+          <table class="table table-striped" ng-show="anyone">
+              <thead><td>Nazwa użytkownika</td><td>Punkty</td></thead>
+                <tbody>
+                    <tr ng-repeat="gamer in gamers">
+                        <td>[[gamer.username]]</td>
+                        <td>[[gamer.points]]</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h1 ng-hide="anyone">Nikt jeszcze nie zagłosował</h1>
+    </div>
   </body>
 </html>
